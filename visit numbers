@@ -1,0 +1,22 @@
+
+proc sort data=sv (keep =  site subjectid visit visdat );
+by site subjectid visdat;
+run;
+
+data sv1;
+set sv;
+by site subjectid visdat;
+if first.subjectid then visitnum=1;
+else if index(visit,"Uns") eq 0 then visitnum+1;
+run;
+
+proc sort data=sv1;
+by site subjectid visitnum;
+run;
+
+data sv2;
+set sv1;
+by site subjectid visitnum;
+if first.visitnum then vnum=visitnum;
+else vnum+0.1;
+run;
